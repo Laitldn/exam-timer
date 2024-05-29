@@ -1,0 +1,42 @@
+body{
+  background-color: #30384b;
+}
+
+
+
+
+button{
+
+  cursor: pointer;
+  background-color: transparent;
+  color:white;
+  border: 0;
+  top : 0%;
+  color: rgba(red, green, blue, 0.8);
+  width: 100px;
+}
+
+button.Settings{
+  position: absolute;
+  top:0%;
+  right: 0%;
+  margin: 10px;
+
+
+}
+
+
+.container {
+  height: 200px;
+  position: relative;
+  border: 3px solid green;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
