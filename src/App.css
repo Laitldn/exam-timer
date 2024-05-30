@@ -25,6 +25,22 @@ button.Settings{
 
 }
 
+button.back{
+  position: absolute;
+  top:0%;
+  right: 0%;
+  margin: 10px;
+
+}
+
+img{
+  position: absolute;
+  top:0%;
+  left: 0%;
+  margin: 10px;
+
+
+}
 
 .container {
   height: 200px;
@@ -35,7 +51,21 @@ button.Settings{
 .center {
   margin: 0;
   position: absolute;
-  top: 35%;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+h1 {
+  color: aliceblue;
+
+}
+
+h1{
+  margin: 0;
+  position: absolute;
+  top: 20%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);

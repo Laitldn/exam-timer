@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './images/LSBU_logo.png';
 import './App.css';
 import Timer from './Timer';
 import { useState } from 'react';
@@ -16,9 +16,12 @@ function App() {
     <main>
 
       <div>
-
+        <img src={logo} alt="LSBU" width={200}/>
       </div>
 
+      
+
+      
       <SettingsContext.Provider value ={{
         showSettings,
         setSettings,
