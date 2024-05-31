@@ -1,19 +1,18 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import SettingsButton from './SettingsButton';
 import { useContext, useRef, useState, useEffect } from 'react';
 import SettingsContext from './SettingsContext';
 
-function Timer() {
+export function Timer() {
     const startHour = 17;
     const startMinute = 51;
     const endHour = 17;
     const endMinute = 52;
 
     const settingsinfo = useContext(SettingsContext);
-    const [remainingTime, setRemainingTime] = useState(0); 
+    const [remainingTime, setRemainingTime] = useState(0);
     const intervalRef = useRef(null);
-    const [pathColor, setPathColor] = useState("#90ee90"); 
+    const [pathColor, setPathColor] = useState("#90ee90");
 
     useEffect(() => {
         const updateTimer = () => {
@@ -23,10 +22,10 @@ function Timer() {
             const currentSeconds = now.getSeconds();
 
             const startTime = new Date();
-            startTime.setHours(startHour, startMinute, 0, 0); 
+            startTime.setHours(startHour, startMinute, 0, 0);
 
             const endTime = new Date();
-            endTime.setHours(endHour, endMinute, 0, 0); 
+            endTime.setHours(endHour, endMinute, 0, 0);
 
             if (now >= startTime && now < endTime) {
                 const totalRemainingSeconds = Math.floor((endTime - now) / 1000);
@@ -37,18 +36,18 @@ function Timer() {
                 const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
                 if (elapsedMinutes < 30 || elapsedMinutes >= totalDurationSeconds / 60 - 30) {
-                    setPathColor("#FF0000"); 
+                    setPathColor("#FF0000");
                 } else {
-                    setPathColor("#90ee90"); 
+                    setPathColor("#90ee90");
                 }
             } else {
                 clearInterval(intervalRef.current);
                 setRemainingTime(0);
-                setPathColor("#90ee90"); 
+                setPathColor("#90ee90");
             }
         };
 
-        updateTimer(); 
+        updateTimer();
 
         intervalRef.current = setInterval(updateTimer, 1000);
 
@@ -62,8 +61,8 @@ function Timer() {
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
 
-    const totalDuration = ((endHour - startHour) * 60 * 60) + ((endMinute - startMinute) * 60); 
-    const percentage = (remainingTime / totalDuration) * 100; 
+    const totalDuration = ((endHour - startHour) * 60 * 60) + ((endMinute - startMinute) * 60);
+    const percentage = (remainingTime / totalDuration) * 100;
 
     return (
         <div>
@@ -84,13 +83,10 @@ function Timer() {
                                 textSize: 15,
                                 pathColor: pathColor,
                                 tailColor: 'rgba(255,255,255,.2)',
-                            })}
-                        />
+                            })} />
                     </div>
                 </div>
             </center>
         </div>
     );
 }
-
-export default Timer;
