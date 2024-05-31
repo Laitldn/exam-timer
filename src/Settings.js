@@ -4,7 +4,6 @@ import Backbutton from "./Backbutton";
 
 function Settings(){
 
-    const settingsinfo = useContext(SettingsContext);
 
     return (
         <div>
@@ -15,7 +14,7 @@ function Settings(){
 
        </h1> 
 
-        <Backbutton onClick={() => settingsinfo.setSettings(false)}/>
+        <Backbutton/>
         </div>
     );
 
