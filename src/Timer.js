@@ -1,31 +1,36 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import Settings from './Settings';
 import SettingsButton from './SettingsButton';
-import { useContext, useRef, useState, useEffect } from 'react';
+import {  useRef, useState, useEffect } from 'react';
 import SettingsContext from './SettingsContext';
 
-export function Timer() {
-    const startHour = 17;
-    const startMinute = 51;
-    const endHour = 17;
-    const endMinute = 52;
+function Timer({ moduleName, startTime, endTime }) {
+    const [showSettings, setSettings] = useState(false);
 
-    const settingsinfo = useContext(SettingsContext);
-    const [remainingTime, setRemainingTime] = useState(0);
+    const parseTime = (timeStr) => {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return { hours, minutes };
+    };
+
+    const start = parseTime(startTime);
+    const end = parseTime(endTime);
+
+    const [showBorder,setBorder] = useState(false);
+    const [remainingTime, setRemainingTime] = useState(0); // Remaining time in seconds
     const intervalRef = useRef(null);
-    const [pathColor, setPathColor] = useState("#90ee90");
+    const [pathColor, setPathColor] = useState("#90ee90"); // Default green
+    const [showTimer, setShowTimer] = useState(true);
 
     useEffect(() => {
         const updateTimer = () => {
             const now = new Date();
-            const currentHours = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const currentSeconds = now.getSeconds();
-
+            
             const startTime = new Date();
-            startTime.setHours(startHour, startMinute, 0, 0);
+            startTime.setHours(start.hours, start.minutes, 0, 0); // Set start time
 
             const endTime = new Date();
-            endTime.setHours(endHour, endMinute, 0, 0);
+            endTime.setHours(end.hours, end.minutes, 0, 0); // Set end time
 
             if (now >= startTime && now < endTime) {
                 const totalRemainingSeconds = Math.floor((endTime - now) / 1000);
@@ -36,23 +41,27 @@ export function Timer() {
                 const elapsedMinutes = Math.floor(elapsedSeconds / 60);
 
                 if (elapsedMinutes < 30 || elapsedMinutes >= totalDurationSeconds / 60 - 30) {
-                    setPathColor("#FF0000");
+                    setPathColor("#FF0000"); // Red for first 30 min and last 30 min
+                    setBorder(true); // Showing the border
                 } else {
-                    setPathColor("#90ee90");
+                    setPathColor("#90ee90"); // Green otherwise
+                    setBorder(false); //Rmoving The Border
                 }
             } else {
                 clearInterval(intervalRef.current);
                 setRemainingTime(0);
-                setPathColor("#90ee90");
+                setPathColor("#90ee90"); // Reset to green
+                // Hide the timer after 5 minutes
+                setTimeout(() => setShowTimer(false), 5 * 60 * 1000);
             }
         };
 
-        updateTimer();
+        updateTimer(); // Initial call to set the countdown state immediately
 
         intervalRef.current = setInterval(updateTimer, 1000);
 
         return () => clearInterval(intervalRef.current);
-    }, []);
+    }, [start, end]);
 
     const formatTime = (seconds) => {
         const hours = Math.floor(seconds / 3600);
@@ -61,32 +70,58 @@ export function Timer() {
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
 
-    const totalDuration = ((endHour - startHour) * 60 * 60) + ((endMinute - startMinute) * 60);
-    const percentage = (remainingTime / totalDuration) * 100;
+    const totalDuration = ((end.hours - start.hours) * 60 * 60) + ((end.minutes - start.minutes) * 60); // Total duration in seconds
+    const percentage = (remainingTime / totalDuration) * 100; // Adjusted to the specified duration
+
+    if (!showTimer) {
+        return null; // Return nothing if the timer should not be shown
+    }
 
     return (
+        
         <div>
-            <div className='details'>
-                <h1>Name of The Module</h1>
-            </div>
-            <div>
-                <SettingsButton onClick={() => settingsinfo.setSettings(true)} />
-            </div>
-            <center>
+            <SettingsContext.Provider value ={{
+                    showSettings,
+                    setSettings,
+                }}>
+
+                {showSettings ? <Settings/> : 
+                
                 <div>
-                    <div className="center" style={{ width: 400, height: 300 }}>
-                        <CircularProgressbar
-                            value={percentage}
-                            text={formatTime(remainingTime)}
-                            styles={buildStyles({
-                                textColor: '#fff',
-                                textSize: 15,
-                                pathColor: pathColor,
-                                tailColor: 'rgba(255,255,255,.2)',
-                            })} />
-                    </div>
+
+                <div className='details'>
+                    <h1>{moduleName}</h1>
                 </div>
-            </center>
+                <div>
+                    <SettingsButton onClick={() => setSettings(true)} />
+                </div>
+                
+                <center>
+                    <div>
+                        <div className="center" style={{ width: 400, height: 300 }}>
+                            
+                            <CircularProgressbar
+                                value={percentage}
+                                text={formatTime(remainingTime)}
+                                styles={buildStyles({
+                                    textColor: '#fff',
+                                    textSize: 15,
+                                    pathColor: pathColor,
+                                    tailColor: 'rgba(255,255,255,.2)',
+                                    })}
+                                    />
+                            {showBorder ? <hr></hr>: null}
+                        </div>
+                    </div>
+                </center>
+            </div>
+                
+                
+            }
+            </SettingsContext.Provider>
+            
         </div>
     );
 }
+
+export default Timer;

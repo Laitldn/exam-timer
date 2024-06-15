@@ -1,40 +1,36 @@
 import logo from './images/LSBU_logo.png';
 import './App.css';
+import React, { useState } from 'react';
+import InitialPage from './InitialPage';
 import Timer from './Timer';
-import { useState } from 'react';
-import Settings from './Settings';
-import SettingsContext from './SettingsContext';
-
 
 function App() {
+    const [timerData, setTimerData] = useState(null);
 
+    const handleStartTimer = (data) => {
+        setTimerData(data);
+    };
 
-  const [showSettings, setSettings] = useState(false);
- 
-
-  return (
-    <main>
-
-      <div>
-        <img src={logo} alt="LSBU" width={200}/>
-      </div>
-
-      
-
-      
-      <SettingsContext.Provider value ={{
-        showSettings,
-        setSettings,
-      }}>
-
-        {showSettings ? <Settings/> : <Timer/>}
-      </SettingsContext.Provider>
-      
-      
+    return (
+      <main>
         
-      
-    </main>
-  );
+        <div>
+          <img src={logo} alt="LSBU" width={200}/>
+        </div>
+
+        <div className="App">
+            {timerData ? (
+              <Timer
+              moduleName={timerData.moduleName}
+              startTime={timerData.startTime}
+              endTime={timerData.endTime}
+              />
+              ) : (
+                <InitialPage onSubmit={handleStartTimer} />
+                )}
+        </div>
+      </main>
+    );
 }
 
 export default App;

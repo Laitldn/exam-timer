@@ -59,6 +59,7 @@ img{
 
 h1 {
   color: aliceblue;
+  text-align: center;
 
 }
 
@@ -70,3 +71,22 @@ h1{
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+
+hr{
+  margin: 0;
+  height: 30px;
+  position: fixed;
+  top: 110%;
+  left: 33%;
+  background-color: red; 
+  color: red;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  rotate: 45deg;
+  width: 380px;
+  border:none;
+  z-index: -1;
+}
+
+

@@ -1,0 +1,73 @@
+
+.wrapper{
+    width: 500px;
+    margin-top: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: medium;
+}
+
+
+
+label{
+    margin: 10px;
+    color: aliceblue;
+    font-size: 2em;
+    font-weight: 300;
+
+}
+
+input{
+    background-color: transparent;
+    color: aliceblue;
+    text-align: center;
+    font-size: 2.2em;
+    margin: 10px;
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid;
+    padding: 10px;
+    
+}
+
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); 
+}
+
+input[type="text"]{
+    margin: 0%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+}
+
+button.submit{
+    position: relative;
+    cursor: pointer;
+    background-color: transparent;
+    color:aliceblue;
+    border: 2px solid;
+    border-radius: 10px;
+    align-items: center;
+    color: rgba(red, green, blue, 0.8);
+    width: 70%;
+    margin-top: 50px;
+    padding: 10px;
+    font-size: 1.5em;
+    font-weight: 300;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+
+}
+
+
