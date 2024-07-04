@@ -2,10 +2,10 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Settings from './Settings';
 import SettingsButton from './SettingsButton';
-import {  useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import SettingsContext from './SettingsContext';
 
-function Timer({ moduleName, startTime, endTime }) {
+function Timer({ moduleName, startTime, endTime, onTimerEnd }) {
     const [showSettings, setSettings] = useState(false);
 
     const parseTime = (timeStr) => {
@@ -16,7 +16,7 @@ function Timer({ moduleName, startTime, endTime }) {
     const start = parseTime(startTime);
     const end = parseTime(endTime);
 
-    const [showBorder,setBorder] = useState(false);
+    const [showBorder, setBorder] = useState(false);
     const [remainingTime, setRemainingTime] = useState(0); // Remaining time in seconds
     const intervalRef = useRef(null);
     const [pathColor, setPathColor] = useState("#90ee90"); // Default green
@@ -25,7 +25,7 @@ function Timer({ moduleName, startTime, endTime }) {
     useEffect(() => {
         const updateTimer = () => {
             const now = new Date();
-            
+
             const startTime = new Date();
             startTime.setHours(start.hours, start.minutes, 0, 0); // Set start time
 
@@ -45,14 +45,17 @@ function Timer({ moduleName, startTime, endTime }) {
                     setBorder(true); // Showing the border
                 } else {
                     setPathColor("#90ee90"); // Green otherwise
-                    setBorder(false); //Rmoving The Border
+                    setBorder(false); // Removing The Border
                 }
             } else {
                 clearInterval(intervalRef.current);
                 setRemainingTime(0);
                 setPathColor("#90ee90"); // Reset to green
                 // Hide the timer after 5 minutes
-                setTimeout(() => setShowTimer(false), 5 * 60 * 1000);
+                setTimeout(() => {
+                    setShowTimer(false);
+                    onTimerEnd(); // Notify that the timer has ended
+                }, 5 * 60 * 1000);
             }
         };
 
@@ -61,7 +64,7 @@ function Timer({ moduleName, startTime, endTime }) {
         intervalRef.current = setInterval(updateTimer, 1000);
 
         return () => clearInterval(intervalRef.current);
-    }, [start, end]);
+    }, [start, end, onTimerEnd]);
 
     const formatTime = (seconds) => {
         const hours = Math.floor(seconds / 3600);
@@ -78,48 +81,48 @@ function Timer({ moduleName, startTime, endTime }) {
     }
 
     return (
-        
         <div>
-            <SettingsContext.Provider value ={{
-                    showSettings,
-                    setSettings,
-                }}>
+            <SettingsContext.Provider value={{
+                showSettings,
+                setSettings,
+            }}>
 
-                {showSettings ? <Settings/> : 
-                
-                <div>
+                {showSettings ? <Settings /> :
 
-                <div className='details'>
-                    <h1>{moduleName}</h1>
-                </div>
-                <div>
-                    <SettingsButton onClick={() => setSettings(true)} />
-                </div>
-                
-                <center>
                     <div>
-                        <div className="center" style={{ width: 400, height: 300 }}>
-                            
-                            <CircularProgressbar
-                                value={percentage}
-                                text={formatTime(remainingTime)}
-                                styles={buildStyles({
-                                    textColor: '#fff',
-                                    textSize: 15,
-                                    pathColor: pathColor,
-                                    tailColor: 'rgba(255,255,255,.2)',
-                                    })}
-                                    />
-                            {showBorder ? <hr></hr>: null}
+
+                        <div className='details'>
+                            <h1>{moduleName}</h1>
                         </div>
+                        <div>
+                            <SettingsButton onClick={() => setSettings(true)} />
+                        </div>
+
+                        <center>
+                            <div>
+                                <div className="center" style={{ width: 400, height: 300 }}>
+                                    <CircularProgressbar
+                                        value={percentage}
+                                        text={formatTime(remainingTime)}
+                                        styles={buildStyles({
+                                            textColor: '#fff',
+                                            textSize: 15,
+                                            pathColor: pathColor,
+                                            tailColor: 'rgba(255,255,255,.2)',
+                                        })}
+                                    />
+                                    
+                                    {showBorder ? <hr /> : null}
+                                </div>
+                                {showBorder ? <text className='redText'>You are not allowed to leave</text>:<text className='greenText'>You are allowed to leave the room</text>}
+                            </div>
+                        </center>
                     </div>
-                </center>
-            </div>
-                
-                
-            }
+
+
+                }
             </SettingsContext.Provider>
-            
+
         </div>
     );
 }
