@@ -13,7 +13,7 @@ function InitialPage({ onSubmit }) {
         const timerData = { moduleName, startTime, endTime };
         const id = Date.now();
         onSubmit({ ...timerData, id });
-        navigate(`/timer/${id}`); // Redirect to the new timer route
+        navigate(`/timer/${id}`); // redirect to the new timer route
     };
 
     return (

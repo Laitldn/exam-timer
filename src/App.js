@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 import logo from './images/LSBU_logo.png';
 import './App.css';
 import InitialPage from './InitialPage';
@@ -14,13 +15,29 @@ function App() {
     useEffect(() => {
         localStorage.setItem('timers', JSON.stringify(timers));
     }, [timers]);
+    const today = new Date();
 
-    const handleStartTimer = (data) => {
+    const day = today.getDate();
+
+    const month = today.getMonth() + 1;
+
+    const year = today.getFullYear();
+
+    const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+
+
+    const handleStartTimer = async (data) => {
         const newTimer = {
             ...data,
+            date: formattedDate,
             id: Date.now()
         };
-        setTimers((prevTimers) => [...prevTimers, newTimer]);
+        try {
+            await axios.post('http://localhost:5000/timers', newTimer);
+            setTimers((prevTimers) => [...prevTimers, newTimer]);
+        } catch (error) {
+            console.error('Error saving timer:', error);
+        }
     };
 
     const handleTimerEnd = (id) => {
@@ -44,6 +61,7 @@ function App() {
                                     moduleName={timer.moduleName}
                                     startTime={timer.startTime}
                                     endTime={timer.endTime}
+                                    timerId={timer.id}
                                     onTimerEnd={() => handleTimerEnd(timer.id)}
                                 />}
                             />
